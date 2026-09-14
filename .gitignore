@@ -1,0 +1,17 @@
+# Virtual environment (uv)
+.venv/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Raw data (Best practice: keep code on GitHub, download data via scripts)
+# If your dataset is small (<5 MB like dataset.tsv), you can track it, 
+# but ignoring data/raw/ is standard practice for large ML pipelines.
+# data/raw/
