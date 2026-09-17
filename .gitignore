@@ -15,3 +15,4 @@ Thumbs.db
 # If your dataset is small (<5 MB like dataset.tsv), you can track it, 
 # but ignoring data/raw/ is standard practice for large ML pipelines.
 # data/raw/
+models/
