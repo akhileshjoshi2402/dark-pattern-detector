@@ -1,0 +1,31 @@
+page_id	text	label	Pattern Category	clean_text	char_count	word_count	pred	prob_dark_pattern
+1742	Score! You've Qualified for a Checkout Bonus	1	Misdirection	Score! You've Qualified for a Checkout Bonus	44	7	0	0.3043827395986563
+684	0:44:56	1	Urgency	0:44:56	7	1	0	0.3205439627526565
+334	I WANT TO PAY MORE LATER ;)	1	Misdirection	I WANT TO PAY MORE LATER ;)	27	7	0	0.4005218752157316
+1726	"""Your purchase entitles you to the following special"""	1	Misdirection	"""Your purchase entitles you to the following special"""	53	8	0	0.3904533371810844
+931	Enjoy FREE shipping with WSJwine Advantage	1	Sneaking	Enjoy FREE shipping with WSJwine Advantage	42	6	0	0.3280938941843188
+156	Our most recent customers are from New Rochelle, Roseville, and Brooksville	1	Social Proof	Our most recent customers are from New Rochelle, Roseville, and Brooksville	75	11	0	0.2978203203374373
+1718	Before you check out, can we tempt you?	1	Misdirection	Before you check out, can we tempt you?	39	8	0	0.3616958916502081
+1604	Select your size below and we'll email you if it comes back in stock!	0	Not Dark Pattern	Select your size below and we'll email you if it comes back in stock!	69	14	1	0.6015178355028657
+880	I agree to receive marketing emails from Natural Life and agree to our Privacy Policy and terms of use.	1	Forced Action	I agree to receive marketing emails from Natural Life and agree to our Privacy Policy and terms of use.	103	19	0	0.1466294616961765
+695	HAUTELOOK 04:53	1	Urgency	HAUTELOOK 04:53	15	2	0	0.38074284170962275
+767	Discontinued Item	0	Not Dark Pattern	Discontinued Item	17	2	1	0.5456289141993342
+69	Present your Fave voucher (it's in the Purchases tab under My Fave) at the outlet.	0	Not Dark Pattern	Present your Fave voucher (it's in the Purchases tab under My Fave) at the outlet.	82	15	1	0.5181791876395696
+189	 Frame out of stock in this colour	0	Not Dark Pattern	Frame out of stock in this colour	33	7	1	0.6939319196971168
+940	Will sell out fast!	1	Scarcity	Will sell out fast!	19	4	0	0.4566346046879083
+49	404 Orders	1	Social Proof	404 Orders	10	2	0	0.2867469362984112
+1315	Sorry! This product is no longer available	0	Not Dark Pattern	Sorry! This product is no longer available	42	7	1	0.7248365210487814
+512	0 DAYS22 HOURS13 MINUTES21 SECONDS 	1	Urgency	0 DAYS22 HOURS13 MINUTES21 SECONDS	34	5	0	0.4547892372996393
+140	65% of our customers added Surefit protection this year.	1	Social Proof	65% of our customers added Surefit protection this year.	56	9	0	0.4893200993188823
+877	I’ve read and accept the terms & conditions * , I also authorize Bosley to contact me by phone or text utilizing automated dialing equipment, as well as by email or mail with information about appointments, products, services, news or promotions. I also agree to Bosley's Terms of Service. Otherwise, call Bosley at 800-985-6405 to request your FREE information kit or to schedule your FREE no-obligation consultation.	1	Forced Action	I’ve read and accept the terms & conditions * , I also authorize Bosley to contact me by phone or text utilizing automated dialing equipment, as well as by email or mail with information about appointments, products, services, news or promotions. I also agree to Bosley's Terms of Service. Otherwise, call Bosley at 800-985-6405 to request your FREE information kit or to schedule your FREE no-obligation consultation.	418	67	0	0.24098695790832375
+926	◊After 1 year, subscription auto renews with fee. Review your iFit® Coach account on a computer, tablet, smartphone, or equipment console.	1	Sneaking	◊After 1 year, subscription auto renews with fee. Review your iFit® Coach account on a computer, tablet, smartphone, or equipment console.	138	21	0	0.22360396311597278
+672	VIP OFFERS END 00:54:59	1	Urgency	VIP OFFERS END 00:54:59	23	4	0	0.4896641363172033
+1177	N++ is all about using your momentum to complete levels and get high scores, but in this sci-fi world, there’s a slew of inadvertently homicidal enemy robots trying to prevent you from completing your goal.	0	Not Dark Pattern	N++ is all about using your momentum to complete levels and get high scores, but in this sci-fi world, there’s a slew of inadvertently homicidal enemy robots trying to prevent you from completing your goal.	206	35	1	0.5171632787003073
+113	 Don't leave without taking discount 	0	Not Dark Pattern	Don't leave without taking discount	35	5	1	0.595517375876118
+1618	Sellout risk:	1	Scarcity	Sellout risk:	13	2	0	0.23423918013782988
+1739	OUR BEST SELLING GOGGLE	1	Misdirection	OUR BEST SELLING GOGGLE	23	4	0	0.23338608300275515
+592	0011Days:0088Hours:4411Minutes:21125445Seconds	1	Urgency	0011Days:0088Hours:4411Minutes:21125445Seconds	46	1	0	0.23423918013782988
+537	00DAYS07HOURS09MINUTES39SECONDS	1	Urgency	00DAYS07HOURS09MINUTES39SECONDS	31	1	0	0.23423918013782988
+879	I would like to join Backstage Pass & agree to the Terms & Conditions & to receive emails & other promotional offers.	1	Forced Action	I would like to join Backstage Pass & agree to the Terms & Conditions & to receive emails & other promotional offers.	117	22	0	0.3835983469041345
+1766	Shipping Insurance Remove Insurance	1	Sneaking	Shipping Insurance Remove Insurance	35	4	0	0.19446243333019106
+932	Selling fast!	1	Scarcity	Selling fast!	13	2	0	0.48403453925186046
