@@ -3,8 +3,10 @@ name = "dark-pattern-detector"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.12, <3.13"
 dependencies = [
+    "accelerate>=1.15.0",
+    "datasets>=5.0.1",
     "ipykernel>=7.3.0",
     "joblib>=1.6.0",
     "matplotlib>=3.11.2",
@@ -13,4 +15,8 @@ dependencies = [
     "requests>=2.34.2",
     "scikit-learn>=1.9.1",
     "seaborn>=0.13.2",
+    "torch>=2.14.0",
+    "torchaudio>=2.11.0",
+    "torchvision>=0.29.0",
+    "transformers>=5.17.0",
 ]

@@ -16,3 +16,10 @@ Thumbs.db
 # but ignoring data/raw/ is standard practice for large ML pipelines.
 # data/raw/
 models/
+
+# Hugging Face and PyTorch artifacts
+checkpoints/
+runs/
+*.pt
+*.bin
+*.safetensors
