@@ -1,0 +1,17 @@
+page_id	text	label	Pattern Category	clean_text	char_count	word_count	pred	prob_dark
+1742	Score! You've Qualified for a Checkout Bonus	1	Misdirection	Score! You've Qualified for a Checkout Bonus	44	7	0	0.15275446
+1779	After getting my jersey on Monday, I am hooked on CoolHockey. I will surely be buying from CoolHockey from now on.	0	Not Dark Pattern	After getting my jersey on Monday, I am hooked on CoolHockey. I will surely be buying from CoolHockey from now on.	114	21	1	0.71547073
+344	I do not want to protect my item	1	Misdirection	I do not want to protect my item	32	8	0	0.019667545
+931	Enjoy FREE shipping with WSJwine Advantage	1	Sneaking	Enjoy FREE shipping with WSJwine Advantage	42	6	0	0.2672823
+156	Our most recent customers are from New Rochelle, Roseville, and Brooksville	1	Social Proof	Our most recent customers are from New Rochelle, Roseville, and Brooksville	75	11	0	0.055881858
+1718	Before you check out, can we tempt you?	1	Misdirection	Before you check out, can we tempt you?	39	8	0	0.02120914
+1026	You've made the starting lineup. Be on the look out for an exclusive offer for signing up.	0	Not Dark Pattern	You've made the starting lineup. Be on the look out for an exclusive offer for signing up.	90	17	1	0.6490412
+880	I agree to receive marketing emails from Natural Life and agree to our Privacy Policy and terms of use.	1	Forced Action	I agree to receive marketing emails from Natural Life and agree to our Privacy Policy and terms of use.	103	19	0	0.009425937
+188	 Sold out 	0	Not Dark Pattern	Sold out	8	2	1	0.9972959
+1315	Sorry! This product is no longer available	0	Not Dark Pattern	Sorry! This product is no longer available	42	7	1	0.9130739
+877	I’ve read and accept the terms & conditions * , I also authorize Bosley to contact me by phone or text utilizing automated dialing equipment, as well as by email or mail with information about appointments, products, services, news or promotions. I also agree to Bosley's Terms of Service. Otherwise, call Bosley at 800-985-6405 to request your FREE information kit or to schedule your FREE no-obligation consultation.	1	Forced Action	I’ve read and accept the terms & conditions * , I also authorize Bosley to contact me by phone or text utilizing automated dialing equipment, as well as by email or mail with information about appointments, products, services, news or promotions. I also agree to Bosley's Terms of Service. Otherwise, call Bosley at 800-985-6405 to request your FREE information kit or to schedule your FREE no-obligation consultation.	418	67	0	0.13115507
+113	 Don't leave without taking discount 	0	Not Dark Pattern	Don't leave without taking discount	35	5	1	0.99920064
+1618	Sellout risk:	1	Scarcity	Sellout risk:	13	2	0	0.007627108
+1739	OUR BEST SELLING GOGGLE	1	Misdirection	OUR BEST SELLING GOGGLE	23	4	0	0.013025289
+1550	We are not currently accepting orders from outside of the UK.	0	Not Dark Pattern	We are not currently accepting orders from outside of the UK.	61	11	1	0.6169858
+1766	Shipping Insurance Remove Insurance	1	Sneaking	Shipping Insurance Remove Insurance	35	4	0	0.00396445
