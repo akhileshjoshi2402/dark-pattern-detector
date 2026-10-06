@@ -23,3 +23,6 @@ runs/
 *.pt
 *.bin
 *.safetensors
+
+# ONNX exported models
+models/*.onnx
