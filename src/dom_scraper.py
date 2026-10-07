@@ -2,12 +2,40 @@ import asyncio
 from typing import List, Dict, Any
 from playwright.async_api import async_playwright, Browser, Page
 
-TARGET_TAGS = ["button", "a", "span", "p", "label", "h1", "h2", "h3", "h4", "li", "strong", "em"]
+TARGET_TAGS = [
+    "button", "a", "span", "p", "label", 
+    "h1", "h2", "h3", "h4", "li", "strong", "em", "dialog"
+]
 
-async def extract_ui_elements_from_url(url: str, headless: bool = True, timeout_ms: int = 30000) -> List[Dict[str, Any]]:
+async def trigger_scroll_and_lazy_load(page: Page, scroll_delay_ms: int = 400) -> None:
     """
-    Renders dynamic web pages via headless Chromium and extracts visible UI text nodes
-    focused on leaf/interactive elements to eliminate ancestral container duplication.
+    Simulates human scrolling down the document to trigger lazy-loaded
+    DOM nodes, hydration events, and scroll-depth popups.
+    """
+    total_height = await page.evaluate("() => document.body.scrollHeight")
+    viewport_height = 800
+    current_position = 0
+
+    while current_position < total_height:
+        current_position += viewport_height
+        await page.evaluate(f"window.scrollTo(0, {current_position})")
+        await page.wait_for_timeout(scroll_delay_ms)
+        # Re-evaluate scroll height in case infinite scroll or lazy sections expanded it
+        total_height = await page.evaluate("() => document.body.scrollHeight")
+
+    # Scroll back to the top to capture any sticky headers or top-level popups
+    await page.evaluate("window.scrollTo(0, 0)")
+    await page.wait_for_timeout(500)
+
+async def extract_ui_elements_from_url(
+    url: str, 
+    headless: bool = True, 
+    timeout_ms: int = 30000,
+    trigger_events: bool = True
+) -> List[Dict[str, Any]]:
+    """
+    Renders web pages via headless Chromium, executes scrolling and interaction triggers,
+    and extracts visible text nodes along with structural and overlay metadata.
     """
     print(f"\n[Scraper] Initializing Chromium engine...")
 
@@ -35,7 +63,11 @@ async def extract_ui_elements_from_url(url: str, headless: bool = True, timeout_
             await browser.close()
             return []
 
-        # Traverse target tags, filtering out empty or parent wrapper containers
+        if trigger_events:
+            print(f"[Scraper] Executing dynamic scroll triggers and lazy-load routines...")
+            await trigger_scroll_and_lazy_load(page)
+
+        # In-browser DOM extraction with leaf filtering and modal/overlay detection
         raw_nodes = await page.evaluate(
             """
             (tags) => {
@@ -45,23 +77,26 @@ async def extract_ui_elements_from_url(url: str, headless: bool = True, timeout_
                 const seenTexts = new Set();
 
                 elements.forEach((el, index) => {
-                    // Check visibility
                     const isVisible = !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
                     if (!isVisible) return;
 
-                    // Ensure this element is either a true leaf or direct text holder
-                    // (skip elements whose child elements already contain identical full text)
                     const directText = el.innerText ? el.innerText.trim() : "";
                     if (!directText || directText.length < 2) return;
 
-                    // Normalize whitespace
                     const clean = directText.replace(/\\s+/g, ' ');
-
-                    // De-duplicate identical consecutive child-parent echoes
                     if (seenTexts.has(clean)) return;
                     seenTexts.add(clean);
 
-                    // Compute lightweight CSS selector path
+                    // Overlay / modal heuristic detection
+                    const isOverlay = !!(
+                        el.closest('dialog') || 
+                        el.closest('[role="dialog"]') || 
+                        el.closest('[aria-modal="true"]') ||
+                        el.closest('.modal') || 
+                        el.closest('.popup') ||
+                        el.closest('.overlay')
+                    );
+
                     let selectorPath = el.tagName.toLowerCase();
                     if (el.id) {
                         selectorPath += `#${el.id}`;
@@ -75,6 +110,7 @@ async def extract_ui_elements_from_url(url: str, headless: bool = True, timeout_
                         "tag": el.tagName.toLowerCase(),
                         "selector": selectorPath,
                         "class_name": typeof el.className === 'string' ? el.className.trim() : "",
+                        "is_overlay": isOverlay,
                         "text": clean
                     });
                 });
@@ -84,21 +120,22 @@ async def extract_ui_elements_from_url(url: str, headless: bool = True, timeout_
             TARGET_TAGS
         )
 
-        print(f"[Scraper] Filtered DOM nodes collected: {len(raw_nodes)}")
+        print(f"[Scraper] Total extracted UI elements: {len(raw_nodes)}")
         await browser.close()
         return raw_nodes
 
 if __name__ == "__main__":
     test_url = "http://books.toscrape.com/"
     print("=" * 65)
-    print("DAY 10: REFINED DOM EXTRACTION (LEAF FILTERING)")
+    print("DAY 11: DYNAMIC SCROLL & OVERLAY INTERCEPTION TEST")
     print("=" * 65)
     
-    nodes = asyncio.run(extract_ui_elements_from_url(test_url))
-    print(f"\nExtracted {len(nodes)} distinct UI elements.")
+    nodes = asyncio.run(extract_ui_elements_from_url(test_url, trigger_events=True))
+    print(f"\nExtracted {len(nodes)} distinct UI elements with dynamic triggers.")
     print("Sample extracted nodes:")
-    for item in nodes[:8]:
+    for item in nodes[:6]:
         sample = item['text']
-        if len(sample) > 60:
-            sample = sample[:57] + "..."
-        print(f" • [<{item['tag']}> {item['selector']}] \"{sample}\"")
+        if len(sample) > 55:
+            sample = sample[:52] + "..."
+        overlay_flag = "[OVERLAY] " if item['is_overlay'] else ""
+        print(f" • {overlay_flag}[<{item['tag']}> {item['selector']}] \"{sample}\"")
