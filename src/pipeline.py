@@ -8,29 +8,43 @@ from src.dom_scraper import extract_ui_elements_from_url
 from src.heuristic_filter import filter_dom_candidates
 
 # Factual e-commerce inventory, pricing, and cart actions that mimic scarcity tokens
-FACTUAL_CATALOG_PATTERNS = [
-    r"^\s*in\s+stock\s*$",
-    r"^\s*out\s+of\s+stock\s*$",
-    r"^\s*available\s*$",
-    r"[£$€]\d+(\.\d{2})?\s+in\s+stock",
-    r"add\s+to\s+(basket|cart)",
-    r"page\s+\d+\s+of\s+\d+",
+CATALOG_STOCK_PATTERNS = [
+    re.compile(r"^in stock\.?$", re.IGNORECASE),
+    re.compile(r"^in stock\b.*delivered\b", re.IGNORECASE),
+    re.compile(r"^\(?\d+\s+available\)?$", re.IGNORECASE),
+    re.compile(r"^free shipping on orders over", re.IGNORECASE),
+    re.compile(r"^free delivery", re.IGNORECASE),
+    re.compile(r"^page \d+ of \d+$", re.IGNORECASE),
+    re.compile(r"^£\d+(\.\d{2})?\s+in stock", re.IGNORECASE),
+    re.compile(r"^add to (basket|cart)$", re.IGNORECASE),
 ]
 
-def apply_catalog_guardrails(candidates: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    Suppresses false alarms where benign catalog availability or pagination
-    triggers scarcity patterns without coercive modifiers.
-    """
+def apply_catalog_guardrails(candidates):
     guarded = []
     for item in candidates:
-        text = item.get("text", "").strip().lower()
-        is_factual = any(re.search(pat, text, re.IGNORECASE) for pat in FACTUAL_CATALOG_PATTERNS)
-        has_urgency = bool(re.search(r"\b(hurry|fast|limited|left|ends?|now|order)\b", text, re.IGNORECASE))
+        text = item.get("text", "").strip()
+        is_safe = False
+        
+        for pat in CATALOG_STOCK_PATTERNS:
+            if pat.search(text):
+                is_safe = True
+                break
+                
+        # Also protect standalone retail listings combining price + in stock
+        if "in stock" in text.lower() and not any(k in text.lower() for k in ["only", "hurry", "left", "fast", "last"]):
+            is_safe = True
 
-        # Mark for catalog override only if it matches factual terms without urgent modifiers
-        item["guardrail_override"] = bool(is_factual and not has_urgency)
-        guarded.append(item)
+        if is_safe:
+            guarded.append({
+                **item,
+                "guardrail_override": True,
+                "prob_dark": 0.0001,
+                "confidence": 0.9999,
+                "verdict": "SAFE_CATALOG_OVERRIDE"
+            })
+        else:
+            guarded.append(item)
+            
     return guarded
 
 async def run_audit_pipeline(url: str) -> Dict[str, Any]:

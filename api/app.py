@@ -18,7 +18,6 @@ async def lifespan(app: FastAPI):
     print("\n[Lifespan Startup] Preloading quantized ONNX model and tokenizer...")
     session, tokenizer, policy = load_policy_and_session()
     
-    # Pin directly into application state
     app.state.session = session
     app.state.tokenizer = tokenizer
     app.state.policy = policy
@@ -49,7 +48,7 @@ app.add_middleware(
 
 
 # ---------------------------------------------------------------------------
-# 2. Pydantic Schemas
+# 2. Pydantic Schemas (Aligned with src/pipeline.py)
 # ---------------------------------------------------------------------------
 class SnippetRequest(BaseModel):
     snippets: List[str]
@@ -78,8 +77,9 @@ class TimingMetrics(BaseModel):
 class AuditSummary(BaseModel):
     total_dom_nodes: int
     pruned_candidates: int
-    scored_by_model: int
-    deceptive_count: int
+    model_scored: int
+    guardrail_suppressed: int
+    flagged_count: int
 
 class UrlAuditResponse(BaseModel):
     target_url: str
@@ -97,9 +97,10 @@ def _score_cached_snippets(session, tokenizer, policy, snippets: List[str]):
         for idx, text in enumerate(snippets)
     ]
     
-    # In-memory catalog guardrails
     guarded = apply_catalog_guardrails(raw_candidates)
+    
     model_candidates = [c for c in guarded if not c.get("guardrail_override")]
+    override_candidates = [c for c in guarded if c.get("guardrail_override")]
     
     scored_items = []
     if model_candidates:
@@ -111,20 +112,11 @@ def _score_cached_snippets(session, tokenizer, policy, snippets: List[str]):
             batch_size=16,
         )
         
-    for c in guarded:
-        if c.get("guardrail_override"):
-            scored_items.append({
-                **c,
-                "prob_dark": 0.0001,
-                "confidence": 0.9999,
-                "verdict": "SAFE_CATALOG_OVERRIDE"
-            })
-            
-    scored_items.sort(key=lambda x: x["node_id"])
-    return scored_items
+    all_results = scored_items + override_candidates
+    all_results.sort(key=lambda x: x["node_id"])
+    return all_results
 
 def _run_sync_pipeline_wrapper(target_url: str):
-    """Executes the Playwright scraper in an isolated thread to avoid Windows loop conflicts."""
     return asyncio.run(run_audit_pipeline(target_url))
 
 
@@ -155,7 +147,6 @@ async def analyze_snippets(payload: SnippetRequest, request: Request):
     tokenizer = request.app.state.tokenizer
     policy = request.app.state.policy
 
-    # Offload batch inference to thread pool using in-memory model cache
     scored = await asyncio.to_thread(
         _score_cached_snippets, session, tokenizer, policy, payload.snippets
     )
